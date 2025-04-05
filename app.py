@@ -2,7 +2,7 @@ from flask import Flask, jsonify, render_template
 import pandas as pd
 
 app = Flask(__name__)
-df = pd.read_csv("data/dummy.csv")
+df = pd.read_csv("data/dummy_2.csv")
 
 @app.route("/")
 def dashboard():
@@ -16,12 +16,11 @@ def show_features():
 
 @app.route("/priority")
 def next_priority():
-    top_features = df.head(3).to_dict(orient='records')  # Get top 3 rows as dicts
+    top_features = df.head(3).to_dict(orient='records')
     return render_template("priority.html", title="Next Priority Feature", features=top_features)
 
-@app.route("/idea/<string:id>")  # Changed from <int:id> to <string:id>
+@app.route("/idea/<string:id>") 
 def get_idea(id):
-    # Filter dataframe by UUID string match
     idea = df[df['ID'] == id]
     if not idea.empty:
         return render_template("view_idea.html", idea=idea.iloc[0])
