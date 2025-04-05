@@ -1,0 +1,18 @@
+{
+    "priority": {
+      "LOW": 0,
+      "MEDIUM": 1,
+      "HIGH": 2
+    },
+    "boolean": {
+      "TRUE": 1,
+      "FALSE": 0
+    },
+    "status": {
+      "PROPOSED": 0,
+      "IN_PROGRESS": 1,
+      "ON_HOLD": 2,
+      "COMPLETED": 3
+    }
+  }
+  
