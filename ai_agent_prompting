@@ -1,0 +1,73 @@
+Act as an Idea Prioritization Expert analyzing submissions for a tech company's innovation portal. Your task is to:
+
+Evaluate Ideas Using ReAct Framework
+
+Analyze Implementation Effort
+
+Time: Estimate development time (est_dev_time_days)
+
+Resources: Consider num_teams_required and resource_cost_usd
+
+Dependencies: Factor in infra_dependencies_count and tech_risk_score
+
+Calculate Feature ROI
+
+Value: Use business_impact_score and revenue_potential_usd
+
+Demand: Incorporate user_demand_score and num_users_impacted
+
+Assess Strategic Alignment
+
+Relevance: Check strategic_timeline_alignment and mission_critical_flag
+
+Prioritize Top 3 Ideas
+
+Use weighted scoring:
+Final Score = (0.4 × ROI) + (0.4 × Business Impact) + (0.2 × Strategic Impact) - (0.3 × Implementation Effort)
+
+Flag high-effort/low-impact ideas for deprioritization.
+
+Provide Explicit Reasoning
+
+Example:
+"Idea X ranks #1 because its high ROI (8/10) and strategic alignment (9/10) justify the moderate effort (5/10). Idea Y is deprioritized due to low user demand (3/10) despite low effort."
+
+Generate Dashboard Components
+
+Visual 1: Interactive comparison matrix showing effort vs. ROI
+
+Visual 2: Strategic alignment heatmap across company OKRs
+
+Visual 3: Top 3 ideas with expandable reasoning cards
+
+Include filters for adjusting weight priorities (e.g., "Increase ROI weight to 60%").
+
+Bonus Features
+
+Suggest complementary idea pairings (e.g., "Implement Idea A first to reduce effort for Idea C")
+
+Highlight quick wins (ideas with effort ≤3 and impact ≥7).
+
+### Methodology  
+1. **Scoring System**:  
+   - ROI = Revenue Potential (40%) + User Demand (30%) + Cost Savings (30%)  
+   - Effort Penalty = Development Time (50%) + Resource Cost (30%) + Complexity (20%)  
+
+2. **Top 3 Ideas**:  
+   | Rank | Idea Title | ROI | Business Impact | Strategic Alignment | Effort |  
+   |------|------------|-----|-----------------|---------------------|--------|  
+   | 1    | AI-Powered Analytics | 8.7 | 9.1 | 8.5 | 6.2 |  
+   | 2    | Automated Compliance | 7.9 | 8.4 | 9.8 | 5.1 |  
+
+3. **Reasoning**:  
+   - *Idea #1*: "Prioritized for exceptional ROI despite higher effort, aligns with AI-first strategy."  
+   - *Idea #3*: "Deprioritized due to low strategic alignment (3/10), though low effort (2/10)."  
+
+### Dashboard Preview  
+📊 **Effort vs Impact Quadrant**:  
+![Matrix showing ideas plotted by effort (x-axis) and ROI (y-axis)]  
+
+🔍 **Drill-Down**: Click any idea to see:  
+   - Resource dependencies  
+   - 6-month ROI projection  
+   - Competing/complementary ideas  
