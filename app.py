@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, render_template
 import pandas as pd
+from data import id_to_comments
 
 app = Flask(__name__)
 df = pd.read_csv("data/dummy_2.csv")
@@ -25,6 +26,6 @@ def get_idea(id):
     # Show individual idea detail page
     idea = df[df['ID'] == id]
     if not idea.empty:
-        return render_template("view_idea.html", idea=idea.iloc[0])
+        return render_template("view_idea.html", idea=idea.iloc[0],comments=id_to_comments[id])
     else:
         return jsonify({"error": "Idea not found"}), 404
