@@ -1,31 +1,103 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>{{ title }}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-light">
-    <div class="container my-5">
-        <h2 class="text-center mb-4">{{ title }}</h2>
 
-        <div class="row row-cols-1 row-cols-md-3 g-4">
-            {% for item in features %}
-            <div class="col">
-                <a href="/idea/{{ item.ID }}" class="text-decoration-none text-dark">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ item.Title }}</h5>
-                            <p class="card-text">{{ item.Description }}</p>
-                        </div>
-                    </div>
-                </a>
+{% extends "base.html" %}
+
+{% block head %}
+<!-- Optional: Add any page-specific CSS here -->
+<style>
+    .page-heading {
+        background: linear-gradient(90deg, #0d6efd 0%, #6610f2 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 12px;
+        text-align: center;
+        margin-bottom: 40px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .weight-label {
+        font-weight: 600;
+    }
+
+    .slider-value {
+        font-weight: 600;
+        color: #0d6efd;
+    }
+
+    .card:hover {
+        transform: translateY(-4px);
+        transition: transform 0.2s ease-in-out;
+    }
+
+    .card {
+        border: none;
+        border-radius: 1rem;
+    }
+
+    .weight-card {
+        background: #ffffff;
+        border-radius: 1rem;
+        padding: 20px;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-heading">
+    <h2>🚀 {{ title }}</h2>
+</div>
+
+<!-- Weight Adjustments -->
+<div class="weight-card mb-5">
+    <h4 class="mb-4">⚖ Adjust Impact Weights</h4>
+    <form method="POST" action="/update-weights">
+        <div class="mb-3">
+            <label class="form-label weight-label" for="businessImpactSlider">
+                💼 Business Impact: <span id="businessImpactVal" class="slider-value">40%</span>
+            </label>
+            <input type="range" class="form-range" id="businessImpactSlider" name="business_impact" min="0" max="100" value="40" oninput="updateValue('businessImpactSlider', 'businessImpactVal')">
+        </div>
+        <div class="mb-3">
+            <label class="form-label weight-label" for="roiSlider">
+                📈 ROI: <span id="roiVal" class="slider-value">30%</span>
+            </label>
+            <input type="range" class="form-range" id="roiSlider" name="roi" min="0" max="100" value="30" oninput="updateValue('roiSlider', 'roiVal')">
+        </div>
+        <div class="mb-3">
+            <label class="form-label weight-label" for="strategicSlider">
+                🧭 Strategic Impact: <span id="strategicVal" class="slider-value">30%</span>
+            </label>
+            <input type="range" class="form-range" id="strategicSlider" name="strategic_impact" min="0" max="100" value="30" oninput="updateValue('strategicSlider', 'strategicVal')">
+        </div>
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary px-4">Regenerate</button>
+        </div>
+    </form>
+</div>
+
+<!-- Idea Cards -->
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for item in features %}
+    <div class="col">
+        <a href="/idea/{{ item.ID }}" class="text-decoration-none text-dark">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">💡 {{ item.Title }}</h5>
+                    <p class="card-text">{{ item.Description[:120] }}...</p>
+                </div>
             </div>
-            {% endfor %}
-        </div>
-
-        <div class="text-center mt-5">
-            <a href="/" class="btn btn-secondary">Back to Dashboard</a>
-        </div>
+        </a>
     </div>
-</body>
-</html>
+    {% endfor %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function updateValue(sliderId, labelId) {
+        const slider = document.getElementById(sliderId);
+        const label = document.getElementById(labelId);
+        label.innerText = slider.value + '%';
+    }
+</script>
+{% endblock %}
