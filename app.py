@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, render_template
 import pandas as pd
-from data import id_to_comments
+from data import id_to_comments, dependencies, supports
 
 app = Flask(__name__)
 df = pd.read_csv("data/dummy_2.csv")
@@ -17,15 +17,14 @@ def show_ideas():
 
 @app.route("/priority")
 def next_priority():
-    # Send top 3 ideas to the priority template
     top_features = df.head(3).to_dict(orient='records')
-    return render_template("priority.html", title="Next Priority Feature", features=top_features)
+    top_ids = df.head(3)['ID'].tolist()
+    return render_template("priority.html", title="Next Priority Feature", features=top_features, supp1=supports[top_ids[0]],supp2=supports[top_ids[1]],supp3=supports[top_ids[2]])
 
 @app.route("/idea/<string:id>") 
 def get_idea(id):
-    # Show individual idea detail page
     idea = df[df['ID'] == id]
     if not idea.empty:
-        return render_template("view_idea.html", idea=idea.iloc[0],comments=id_to_comments[id])
+        return render_template("view_idea.html", idea=idea.iloc[0],comments=id_to_comments[id],dependencies=dependencies[id])
     else:
         return jsonify({"error": "Idea not found"}), 404
