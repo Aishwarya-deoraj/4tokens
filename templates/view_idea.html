@@ -1,100 +1,161 @@
+
 {% extends "base.html" %}
 
+{% block head %}
+<style>
+    .tab-buttons {
+        margin-top: 10px;
+    }
+
+    .tab-buttons .btn {
+        margin-right: 10px;
+    }
+
+    .card-scroll {
+        max-height: 300px;
+        overflow-y: auto;
+    }
+
+    .comment-card {
+        margin-bottom: 15px;
+    }
+
+    .tab-section {
+        display: none;
+    }
+
+    .tab-section.active {
+        display: block;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
+<a href="javascript:history.back()" class="btn btn-secondary mb-4">Back to List</a>
+
 <div class="card shadow-sm">
+    <!-- Header with Buttons -->
     <div class="card-header bg-primary text-white">
-        <h2 class="mb-0">{{ idea.Title }}</h2>
+        <h2 class="mb-0 d-flex justify-content-between align-items-center">
+            {{ idea.Title }}
+            <div class="tab-buttons">
+                <button class="btn btn-light btn-sm" onclick="showTab('description')">📝 Description</button>
+                <button class="btn btn-light btn-sm" onclick="showTab('comments')">💬 Comments</button>
+                <button class="btn btn-light btn-sm" onclick="showTab('dependencies')">🔗 Dependencies</button>
+            </div>
+        </h2>
     </div>
+
     <div class="card-body">
-        <!-- Basic Information -->
-        <div class="row mb-4">
-            <div class="col-md-8">
-                <h4 class="mb-3">📝 Description</h4>
-                <p class="text-muted">{{ idea.Description }}</p>
+        <!-- Description Tab -->
+        <div id="description" class="tab-section active">
+            <div class="row mb-4">
+                <div class="col-md-8">
+                    <h4 class="mb-3">📄 Description</h4>
+                    <p class="text-muted">{{ idea.Description }}</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>📌 Summary</h5>
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <strong>Status:</strong>
+                            <span class="badge bg-{{ 'success' if idea.Status == 'Completed' else 'warning' }}">
+                                {{ idea.Status }}
+                            </span>
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Submission Date:</strong> {{ idea.Submission_Date }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Upvotes:</strong> {{ idea.Upvotes }}
+                        </li>
+                    </ul>
+                </div>
             </div>
-            <div class="col-md-4">
-                <h4 class="mb-3">📌 Summary</h4>
-                <ul class="list-group">
-                    <li class="list-group-item d-flex justify-content-between">
-                        <span>Status</span>
-                        <span class="badge bg-{{ 'success' if idea.Status == 'Completed' else 'warning' }}">
-                            {{ idea.Status }}
-                        </span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between">
-                        <span>Submission Date</span>
-                        <span>{{ idea.Submission_Date }}</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between">
-                        <span>Upvotes</span>
-                        <span>{{ idea.Upvotes }}</span>
-                    </li>
-                </ul>
+
+            <!-- Implementation Details and Impact Metrics -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <h4>🛠 Implementation Details</h4>
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Estimated Dev Time</span><span>{{ idea.est_dev_time_days }} days</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Resource Cost</span><span>${{ "{:,.2f}".format(idea.resource_cost_usd) }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Complexity Score</span><span>{{ idea.complexity_score }}/10</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-md-6">
+                    <h4>📊 Impact Metrics</h4>
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Business Impact</span><span>{{ idea.business_impact_score }}/10</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>User Demand</span><span>{{ idea.user_demand_score }}/10</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Strategic Alignment</span><span>{{ idea.strategic_timeline_alignment }}/10</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Additional Info -->
+            <h4>📎 Additional Information</h4>
+            <dl class="row">
+                {% if idea.infra_dependencies_count %}
+                <dt class="col-sm-3">Infrastructure Dependencies</dt>
+                <dd class="col-sm-9">{{ idea.infra_dependencies_count }}</dd>
+                {% endif %}
+                {% if idea.num_users_impacted %}
+                <dt class="col-sm-3">Users Impacted</dt>
+                <dd class="col-sm-9">{{ "{:,}".format(idea.num_users_impacted) }}</dd>
+                {% endif %}
+                {% if idea.revenue_potential_usd %}
+                <dt class="col-sm-3">Revenue Potential</dt>
+                <dd class="col-sm-9">${{ "{:,.2f}".format(idea.revenue_potential_usd) }}</dd>
+                {% endif %}
+            </dl>
+        </div>
+
+       <!-- Comments Tab -->
+        <div id="comments" class="tab-section">
+            <h4 class="mb-3">💬 Comments</h4>
+            <div class="card-scroll">
+                {% for comment in comments %}
+                <div class="card comment-card shadow-sm">
+                    <div class="card-body">
+                        <p class="card-text">{{ comment }}</p>
+                    </div>
+                </div>
+                {% else %}
+                <p class="text-muted">No comments available.</p>
+                {% endfor %}
             </div>
         </div>
 
-        <!-- Implementation Details -->
-        <div class="row mb-4">
-            <div class="col-md-6">
-                <h4>🔧 Implementation Details</h4>
-                <ul class="list-group">
-                    <li class="list-group-item d-flex justify-content-between">
-                        <span>Estimated Dev Time</span>
-                        <span>{{ idea.est_dev_time_days }} days</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between">
-                        <span>Resource Cost</span>
-                        <span>${{ "{:,.2f}".format(idea.resource_cost_usd) }}</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between">
-                        <span>Complexity Score</span>
-                        <span>{{ idea.complexity_score }}/10</span>
-                    </li>
-                </ul>
-            </div>
 
-            <!-- Impact Metrics -->
-            <div class="col-md-6">
-                <h4>📊 Impact Metrics</h4>
-                <ul class="list-group">
-                    <li class="list-group-item d-flex justify-content-between">
-                        <span>Business Impact</span>
-                        <span>{{ idea.business_impact_score }}/10</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between">
-                        <span>User Demand</span>
-                        <span>{{ idea.user_demand_score }}/10</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between">
-                        <span>Strategic Alignment</span>
-                        <span>{{ idea.strategic_timeline_alignment }}/10</span>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- Additional Info -->
-        <div class="row">
-            <div class="col-12">
-                <h4>📎 Additional Information</h4>
-                <dl class="row">
-                    {% if idea.infra_dependencies_count %}
-                    <dt class="col-sm-3">Infrastructure Dependencies</dt>
-                    <dd class="col-sm-9">{{ idea.infra_dependencies_count }}</dd>
-                    {% endif %}
-
-                    {% if idea.num_users_impacted %}
-                    <dt class="col-sm-3">Users Impacted</dt>
-                    <dd class="col-sm-9">{{ "{:,}".format(idea.num_users_impacted) }}</dd>
-                    {% endif %}
-
-                    {% if idea.revenue_potential_usd %}
-                    <dt class="col-sm-3">Revenue Potential</dt>
-                    <dd class="col-sm-9">${{ "{:,.2f}".format(idea.revenue_potential_usd) }}</dd>
-                    {% endif %}
-                </dl>
-            </div>
+        <!-- Dependencies Tab -->
+        <div id="dependencies" class="tab-section">
+            <h4 class="mb-3">🔗 Dependencies</h4>
+            <p class="text-muted">Yet to add.</p>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function showTab(tabId) {
+        const sections = document.querySelectorAll('.tab-section');
+        sections.forEach(section => section.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+    }
+</script>
 {% endblock %}

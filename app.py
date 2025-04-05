@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, render_template
+import ast
 import pandas as pd
 from data import id_to_comments, dependencies, supports
 
@@ -21,10 +22,12 @@ def next_priority():
     top_ids = df.head(3)['ID'].tolist()
     return render_template("priority.html", title="Next Priority Feature", features=top_features, supp1=supports[top_ids[0]],supp2=supports[top_ids[1]],supp3=supports[top_ids[2]])
 
-@app.route("/idea/<string:id>") 
+@app.route("/idea/<string:id>")
 def get_idea(id):
     idea = df[df['ID'] == id]
     if not idea.empty:
-        return render_template("view_idea.html", idea=idea.iloc[0],comments=id_to_comments[id],dependencies=dependencies[id])
+        comment_str = id_to_comments[id]
+        comments = ast.literal_eval(comment_str) if isinstance(comment_str, str) else comment_str
+        return render_template("view_idea.html", idea=idea.iloc[0], comments=comments,dependencies=dependencies[id])
     else:
         return jsonify({"error": "Idea not found"}), 404
