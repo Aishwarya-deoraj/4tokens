@@ -1,8 +1,81 @@
+
 {% extends "base.html" %}
 
 {% block head %}
-<!-- DataTables CSS -->
+<!-- Bootstrap 5 & DataTables CSS -->
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+<style>
+    #myTable thead th {
+        background-color: #0d6efd;
+        color: white;
+        position: sticky;
+        top: 0;
+        z-index: 2;
+    }
+
+    #myTable tbody tr:hover {
+        background-color: #f2f2f2;
+        cursor: pointer;
+    }
+
+    .dataTables_wrapper .dataTables_filter input {
+        border-radius: 8px;
+        padding: 6px 12px;
+        border: 1px solid #ccc;
+    }
+
+    .dataTables_wrapper .dataTables_length select {
+        border-radius: 6px;
+        padding: 4px 8px;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+        padding: 5px 10px;
+        border-radius: 5px;
+    }
+
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: #f9f9f9;
+    }
+
+    h2.mb-4 {
+        font-weight: bold;
+        text-align: center;
+        color: #333;
+        border-bottom: 2px solid #0d6efd;
+        padding-bottom: 10px;
+        margin-bottom: 30px;
+    }
+
+    .dataTables_length {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .dataTables_length label {
+        margin-bottom: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 500;
+    }
+
+    .dataTables_length select {
+        padding: 4px 10px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        font-weight: 500;
+        background-color: #fff;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg width='14' height='10' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 0.75rem center;
+        background-size: 14px;
+        padding-right: 2rem;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
@@ -13,14 +86,32 @@
 {% endblock %}
 
 {% block scripts %}
+<!-- jQuery + DataTables JS -->
 <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 <script>
+    const titleToId = {{ title_to_id|tojson }};
+
     $(document).ready(function () {
-        $('#myTable').DataTable({
+        const table = $('#myTable').DataTable({
             pageLength: 10,
-            lengthMenu: [5, 10, 25, 50, 100]
+            lengthMenu: [5, 10, 25, 50, 100],
+            language: {
+                search: "_INPUT_",
+                searchPlaceholder: "🔍 Search ideas..."
+            }
+        });
+
+        // Make rows clickable by Title → ID
+        $('#myTable tbody').on('click', 'tr', function () {
+            const title = $(this).find('td:first').text().trim();
+            const id = titleToId[title];
+            if (id) {
+                window.location.href = `/idea/${id}`;
+            } else {
+                alert("Idea ID not found for: " + title);
+            }
         });
     });
 </script>
