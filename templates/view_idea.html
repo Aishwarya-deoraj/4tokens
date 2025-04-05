@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ idea.Title }} - Idea Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container my-5">
+        <a href="javascript:history.back()" class="btn btn-secondary mb-4">Back to List</a>
+        
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h2 class="mb-0">{{ idea.Title }}</h2>
+            </div>
+            <div class="card-body">
+                <!-- Basic Information Section -->
+                <div class="row mb-4">
+                    <div class="col-md-8">
+                        <h4 class="mb-3">Description</h4>
+                        <p class="text-muted">{{ idea.Description }}</p>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="list-group">
+                            <div class="list-group-item">
+                                <strong>Status:</strong> 
+                                <span class="badge bg-{{ 'success' if idea.Status == 'Completed' else 'warning' }}">
+                                    {{ idea.Status }}
+                                </span>
+                            </div>
+                            <div class="list-group-item">
+                                <strong>Submission Date:</strong> 
+                                {{ idea.Submission_Date }}
+                            </div>
+                            <div class="list-group-item">
+                                <strong>Upvotes:</strong> 
+                                {{ idea.Upvotes }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Implementation Details -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h4>Implementation Details</h4>
+                        <ul class="list-group">
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Estimated Development Time</span>
+                                <span>{{ idea.est_dev_time_days }} days</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Resource Cost</span>
+                                <span>${{ "{:,.2f}".format(idea.resource_cost_usd) }}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Complexity Score</span>
+                                <span>{{ idea.complexity_score }}/10</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Impact Metrics -->
+                    <div class="col-md-6">
+                        <h4>Impact Metrics</h4>
+                        <ul class="list-group">
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Business Impact</span>
+                                <span>{{ idea.business_impact_score }}/10</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>User Demand</span>
+                                <span>{{ idea.user_demand_score }}/10</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Strategic Alignment</span>
+                                <span>{{ idea.strategic_timeline_alignment }}/10</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Additional Details -->
+                <div class="row">
+                    <div class="col-12">
+                        <h4>Additional Information</h4>
+                        <dl class="row">
+                            {% if idea.infra_dependencies_count %}
+                            <dt class="col-sm-3">Infrastructure Dependencies</dt>
+                            <dd class="col-sm-9">{{ idea.infra_dependencies_count }}</dd>
+                            {% endif %}
+
+                            {% if idea.num_users_impacted %}
+                            <dt class="col-sm-3">Users Impacted</dt>
+                            <dd class="col-sm-9">{{ "{:,}".format(idea.num_users_impacted) }}</dd>
+                            {% endif %}
+
+                            {% if idea.revenue_potential_usd %}
+                            <dt class="col-sm-3">Revenue Potential</dt>
+                            <dd class="col-sm-9">${{ "{:,.2f}".format(idea.revenue_potential_usd) }}</dd>
+                            {% endif %}
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
