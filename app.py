@@ -67,6 +67,12 @@ def next_priority():
 
 @app.route("/idea/<string:id>")
 def get_idea(id):
+    tdf=pd.read_csv('data/df_final_scoress.csv')
+    ideaa=tdf[tdf['ID']==id]
+    bi_score=ideaa.iloc[0]['Cost_Score']*10
+    roi_score=ideaa.iloc[0]['ROI_Score']*10
+    sa_score=ideaa.iloc[0]['SA_Score']*10
+
     idea = df[df['ID'] == id]
     if not idea.empty:
         comment_str = id_to_comments.get(id, "[]")
@@ -85,7 +91,10 @@ def get_idea(id):
             idea=idea.iloc[0],
             comments=comments,
             dependencies=dep_ids,
-            dep_titles=dep_titles
+            dep_titles=dep_titles,
+            bi_score=round(bi_score,2),
+            roi_score=round(roi_score,2),
+            sa_score=round(sa_score,2)
         )
     else:
         return jsonify({"error": "Idea not found"}), 404
