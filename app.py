@@ -1,3 +1,4 @@
+
 from flask import Flask, jsonify, render_template, request
 import ast
 import pandas as pd
@@ -19,31 +20,30 @@ def index():
 
 @app.route("/priority", methods=["GET", "POST"])
 def next_priority():
-    # Default values in case of a GET request or initial load
-    business_impact = 40
-    roi = 30
-    strategic_impact = 30
+    # Default weights
+    business_impact = 4
+    roi = 3
+    strategic_impact = 3
 
     if request.method == "POST":
-        # Get slider values from the form
-        business_impact = int(request.form.get("business_impact", 40))
-        roi = int(request.form.get("roi", 30))
-        strategic_impact = int(request.form.get("strategic_impact", 30))
+        business_impact = int(request.form.get("business_impact", 4))
+        roi = int(request.form.get("roi", 3))
+        strategic_impact = int(request.form.get("strategic_impact", 3))
 
-        print(business_impact, roi, strategic_impact)
-
-    # Get top 3 ideas using the updated weights
+    # Get top 3 ideas using weights (no normalization)
     li = ast.literal_eval(top3_ideas(business_impact, roi, strategic_impact))
 
-    # Unpack IDs and Titles
     id1, title1 = li[0]['id'], li[0]['title']
     id2, title2 = li[1]['id'], li[1]['title']
     id3, title3 = li[2]['id'], li[2]['title']
 
     def get_support_list(feature_id):
         ids = supports_project_ids.get(feature_id, [])
-        return [{"id": sid, "title": df[df['ID'] == sid]['Title'].values[0] if not df[df['ID'] == sid].empty else sid} for sid in ids]
-        
+        return [
+            {"id": sid, "title": df[df['ID'] == sid]['Title'].values[0] if not df[df['ID'] == sid].empty else sid}
+            for sid in ids
+        ]
+
     supp1 = get_support_list(id1)
     supp2 = get_support_list(id2)
     supp3 = get_support_list(id3)
@@ -58,8 +58,12 @@ def next_priority():
         ],
         supp1=supp1,
         supp2=supp2,
-        supp3=supp3
+        supp3=supp3,
+        business_impact=business_impact,
+        roi=roi,
+        strategic_impact=strategic_impact
     )
+
 
 @app.route("/idea/<string:id>")
 def get_idea(id):
