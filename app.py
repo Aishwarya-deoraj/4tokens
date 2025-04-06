@@ -1,9 +1,12 @@
 
-from flask import Flask, jsonify, render_template, request
+
+import base64
+from flask import Flask, jsonify, render_template, request, Response
 import ast
 import pandas as pd
 from data_maps import id_to_comments, dependencies_projects_ids, supports_project_ids
 from priority_ai_agent import top3_ideas
+from chain_of_thought import cot
 
 app = Flask(__name__)
 df = pd.read_csv("data/dummy_2.csv")
@@ -98,3 +101,8 @@ def get_idea(id):
         )
     else:
         return jsonify({"error": "Idea not found"}), 404
+    
+@app.route("/cot/<string:id>")
+def draw(id):
+    buf = cot(id)
+    return Response(buf.getvalue(), mimetype='image/jpeg')

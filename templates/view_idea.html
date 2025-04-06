@@ -1,5 +1,6 @@
 
 
+
 {% extends "base.html" %}
 
 {% block head %}
@@ -43,6 +44,7 @@
                 <button class="btn btn-light btn-sm" onclick="showTab('description')">📝 Description</button>
                 <button class="btn btn-light btn-sm" onclick="showTab('comments')">💬 Comments</button>
                 <button class="btn btn-light btn-sm" onclick="showTab('dependencies')">🔗 Dependencies</button>
+                <button class="btn btn-light btn-sm" onclick="showTab('chain')">🧠 Chain of Thoughts</button>
             </div>
         </h2>
     </div>
@@ -95,13 +97,13 @@
                     <h4>📊 Impact Metrics</h4>
                     <ul class="list-group">
                         <li class="list-group-item d-flex justify-content-between">
-                            <span>Business Impact</span><span>{{ bi_score }}/10</span>
+                            <span>Business Impact</span><span>{{ idea.business_impact_score }}/10</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between">
-                            <span>ROI</span><span>{{ roi_score }}/10</span>
+                            <span>User Demand</span><span>{{ idea.user_demand_score }}/10</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between">
-                            <span>Strategic Alignment</span><span>{{ sa_score }}/10</span>
+                            <span>Strategic Alignment</span><span>{{ idea.strategic_timeline_alignment }}/10</span>
                         </li>
                     </ul>
                 </div>
@@ -158,6 +160,17 @@
             <p class="text-muted">Yet to add.</p>
             {% endif %}
         </div>
+
+        <!-- Chain of Thoughts Tab -->
+        <!-- Chain of Thoughts Tab -->
+        <div id="chain" class="tab-section">
+            <h4 class="mb-3">🧠 Chain of Thoughts</h4>
+            <div class="card card-body bg-light border-0 shadow-sm text-center">
+                <img src="/cot/{{ idea.ID }}" alt="Flowchart" class="img-fluid rounded shadow">
+            </div>
+        </div>
+
+
     </div>
 </div>
 {% endblock %}

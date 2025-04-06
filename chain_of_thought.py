@@ -1,13 +1,15 @@
+
 import networkx as nx
 import matplotlib.pyplot as plt
 from matplotlib.patches import FancyBboxPatch, FancyArrowPatch
 import pandas as pd
 import io
+import matplotlib
+matplotlib.use('Agg')
 
-def chain_of_thought(idea_id):
+def cot(idea_id):
     # Read data
-    df = pd.read_csv("/Users/hoosiersaikap251/dataviz/docs/df_final_scores.csv")
-
+    df = pd.read_csv("data/df_final_scores_v2.csv")
     # Lookup row
     row = df[df["ID"] == idea_id]
     if row.empty:
