@@ -106,3 +106,7 @@ def get_idea(id):
 def draw(id):
     buf = cot(id)
     return Response(buf.getvalue(), mimetype='image/jpeg')
+
+@app.route("/powerbi-dashboard")
+def powerbi_dashboard():
+    return render_template("base.html")
