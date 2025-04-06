@@ -36,7 +36,6 @@
 <a href="javascript:history.back()" class="btn btn-secondary mb-4">Back to List</a>
 
 <div class="card shadow-sm">
-    <!-- Header with Buttons -->
     <div class="card-header bg-primary text-white">
         <h2 class="mb-0 d-flex justify-content-between align-items-center">
             {{ idea.Title }}
@@ -50,7 +49,6 @@
     </div>
 
     <div class="card-body">
-        <!-- Description Tab -->
         <div id="description" class="tab-section active">
             <div class="row mb-4">
                 <div class="col-md-8">
@@ -76,7 +74,6 @@
                 </div>
             </div>
 
-            <!-- Implementation Details and Impact Metrics -->
             <div class="row mb-4">
                 <div class="col-md-6">
                     <h4>🛠 Implementation Details</h4>
@@ -109,7 +106,6 @@
                 </div>
             </div>
 
-            <!-- Additional Info -->
             <h4>📎 Additional Information</h4>
             <dl class="row">
                 {% if idea.infra_dependencies_count %}
@@ -127,7 +123,6 @@
             </dl>
         </div>
 
-       <!-- Comments Tab -->
         <div id="comments" class="tab-section">
             <h4 class="mb-3">💬 Comments</h4>
             <div class="card-scroll">
@@ -144,7 +139,6 @@
         </div>
 
 
-        <!-- Dependencies Tab -->
         <div id="dependencies" class="tab-section">
             <h4 class="mb-3">🔗 Dependencies</h4>
         
@@ -161,8 +155,6 @@
             {% endif %}
         </div>
 
-        <!-- Chain of Thoughts Tab -->
-        <!-- Chain of Thoughts Tab -->
         <div id="chain" class="tab-section">
             <h4 class="mb-3">🧠 Chain of Thoughts</h4>
             <div class="card card-body bg-light border-0 shadow-sm text-center">

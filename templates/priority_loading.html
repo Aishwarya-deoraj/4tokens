@@ -1,0 +1,97 @@
+
+{% extends "base.html" %}
+
+{% block head %}
+<style>
+    .loading-container {
+        height: 80vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        position: relative;
+    }
+
+    .magic-circle {
+        position: relative;
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        box-shadow: 0 0 25px rgba(13, 110, 253, 0.4), 0 0 50px rgba(102, 16, 242, 0.3) inset;
+        animation: pulse 2s infinite ease-in-out;
+    }
+
+    .sparkle {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: #ffffff;
+        box-shadow: 0 0 6px 2px #fff;
+        animation: sparkle 2s infinite ease-in-out alternate;
+    }
+
+    .sparkle:nth-child(1) { top: -10px; left: 50%; animation-delay: 0s; }
+    .sparkle:nth-child(2) { bottom: -10px; left: 50%; animation-delay: 0.5s; }
+    .sparkle:nth-child(3) { left: -10px; top: 50%; animation-delay: 1s; }
+    .sparkle:nth-child(4) { right: -10px; top: 50%; animation-delay: 1.5s; }
+
+    @keyframes sparkle {
+        0% { transform: scale(0.6); opacity: 0.7; }
+        100% { transform: scale(1.4); opacity: 0; }
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.1); opacity: 0.8; }
+    }
+
+    .loading-text {
+        font-size: 1.6rem;
+        font-weight: 600;
+        margin-top: 2rem;
+        color: #6f42c1;
+        white-space: nowrap;
+        overflow: hidden;
+        border-right: 2px solid #6f42c1;
+        width: 0;
+        animation: typing 2.5s steps(30, end) forwards, blink-caret 0.7s step-end infinite;
+    }
+
+    @keyframes typing {
+        from { width: 0 }
+        to { width: 100% }
+    }
+
+    @keyframes blink-caret {
+        50% { border-color: transparent; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="loading-container">
+    <div class="magic-circle">
+        <div class="sparkle"></div>
+        <div class="sparkle"></div>
+        <div class="sparkle"></div>
+        <div class="sparkle"></div>
+    </div>
+    <div class="loading-text">🧙‍♂ Summoning priority spells</div>
+</div>
+
+<form id="priorityForm" method="POST" action="/priority/result" style="display: none;">
+    <input type="hidden" name="business_impact" value="4">
+    <input type="hidden" name="roi" value="3">
+    <input type="hidden" name="strategic_impact" value="3">
+</form>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    setTimeout(() => {
+        document.getElementById("priorityForm").submit();
+    }, 800);
+</script>
+{% endblock %}

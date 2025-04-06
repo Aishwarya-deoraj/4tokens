@@ -21,19 +21,19 @@ def index():
 
     return render_template("table.html", title="All Feature Requests", table=table_html, title_to_id=title_to_id)
 
-@app.route("/priority", methods=["GET", "POST"])
+
+
+@app.route("/priority")
+def priority_loading():
+    return render_template("priority_loading.html", title="Generating Priority...")
+
+
+@app.route("/priority/result", methods=["GET", "POST"])
 def next_priority():
-    # Default weights
-    business_impact = 4
-    roi = 3
-    strategic_impact = 3
+    business_impact = int(request.form.get("business_impact", 4))
+    roi = int(request.form.get("roi", 3))
+    strategic_impact = int(request.form.get("strategic_impact", 3))
 
-    if request.method == "POST":
-        business_impact = int(request.form.get("business_impact", 4))
-        roi = int(request.form.get("roi", 3))
-        strategic_impact = int(request.form.get("strategic_impact", 3))
-
-    # Get top 3 ideas using weights (no normalization)
     li = ast.literal_eval(top3_ideas(business_impact, roi, strategic_impact))
 
     id1, title1 = li[0]['id'], li[0]['title']
