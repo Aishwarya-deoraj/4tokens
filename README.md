@@ -33,6 +33,7 @@ InnovAIte is designed to **facilitate crowdsourced innovation**, allowing busine
 - data/ - filtered datasets relevant to the ideas on the portal and model scores.
 - notebooks/ - Jupyter Notebooks which were used to generate the datasets and do experiments.
 - templates/ - contains all the html files for the webpage.
+- analytics_dashboard/ - contains Power BI (.pbix) dashboard file for visualizing insights on metrics.
 - Additional files include .gitignore, ai_agent_prompting, app.py, chain_of_thought.py, data_maps, priority_agent.py and requriements.txt
 
 
