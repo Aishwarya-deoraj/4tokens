@@ -1,4 +1,5 @@
 
+
 {% extends "base.html" %}
 
 {% block head %}
@@ -75,6 +76,32 @@
         background-size: 14px;
         padding-right: 2rem;
     }
+
+    .badge {
+        font-size: 0.8rem;
+        padding: 5px 10px;
+        border-radius: 0.5rem;
+    }
+
+    .badge-completed {
+        background-color: #198754; /* green */
+        color: white;
+    }
+
+    .badge-inprogress {
+        background-color: #0dcaf0; /* cyan */
+        color: black;
+    }
+
+    .badge-onhold {
+        background-color: #ffc107; /* yellow */
+        color: black;
+    }
+
+    .badge-proposed {
+        background-color: #6c757d; /* gray */
+        color: white;
+    }
 </style>
 {% endblock %}
 
@@ -86,12 +113,12 @@
 {% endblock %}
 
 {% block scripts %}
-<!-- jQuery + DataTables JS -->
 <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
 <script>
-    const titleToId = {{ title_to_id|tojson }};
+    const titleToId = {{ title_to_id | tojson | safe }};
 
     $(document).ready(function () {
         const table = $('#myTable').DataTable({
@@ -100,10 +127,24 @@
             language: {
                 search: "_INPUT_",
                 searchPlaceholder: "🔍 Search ideas..."
+            },
+            createdRow: function (row, data, dataIndex) {
+                const statusText = data[4]?.trim().toLowerCase(); // Status is the 5th column (index 4)
+                const $statusCell = $('td', row).eq(4);
+                let badgeClass = '';
+
+                if (statusText === 'completed') badgeClass = 'badge-completed';
+                else if (statusText === 'in progress') badgeClass = 'badge-inprogress';
+                else if (statusText === 'on hold') badgeClass = 'badge-onhold';
+                else if (statusText === 'proposed') badgeClass = 'badge-proposed';
+
+                if (badgeClass) {
+                    $statusCell.html(`<span class="badge ${badgeClass}">${data[4]}</span>`);
+                }
             }
         });
 
-        // Make rows clickable by Title → ID
+        // Make table rows clickable
         $('#myTable tbody').on('click', 'tr', function () {
             const title = $(this).find('td:first').text().trim();
             const id = titleToId[title];
